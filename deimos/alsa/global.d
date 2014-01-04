@@ -116,7 +116,7 @@ struct snd_async_handler_t;
  *
  * See the #snd_async_add_handler function for details.
  */
-alias void snd_async_callback_t(snd_async_handler_t* handler);
+alias void function(snd_async_handler_t* handler) snd_async_callback_t;
 
 int snd_async_add_handler(snd_async_handler_t** handler, int fd, 
               snd_async_callback_t callback, void* private_data);
