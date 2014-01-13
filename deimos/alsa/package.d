@@ -45,4 +45,5 @@ public import deimos.alsa.asoundef,
               deimos.alsa.input,
               deimos.alsa.output,
               deimos.alsa.error,
-              deimos.alsa.conf;
+              deimos.alsa.conf,
+              deimos.alsa.pcm;
