@@ -30,6 +30,7 @@ import deimos.alsa;
 
 
 extern(C):
+nothrow:
 
 /**
  *  \defgroup RawMidi RawMidi Interface
