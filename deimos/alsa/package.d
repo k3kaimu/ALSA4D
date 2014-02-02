@@ -40,10 +40,30 @@ module deimos.alsa;
 //#include <stdarg.h>
 
 public import deimos.alsa.asoundef,
-              deimos.alsa.version_,
+              deimos.alsa.conf,
+              deimos.alsa.control,
+              deimos.alsa.error,
               deimos.alsa.global,
               deimos.alsa.input,
+              deimos.alsa.mixer,
               deimos.alsa.output,
-              deimos.alsa.error,
-              deimos.alsa.conf,
-              deimos.alsa.pcm;
+              deimos.alsa.pcm,
+              deimos.alsa.version_;
+
+
+version(linux)
+{
+  public import core.sys.posix.poll,
+                core.sys.posix.sys.types;
+}
+else  // for compile test
+{
+  struct pollfd;
+  struct pid_t{};
+}
+
+template isVersion(string s)
+{
+    import std.string;
+    mixin(q{version(%s) enum isVersion = true; else enum isVersion = false; }.format(s));
+}

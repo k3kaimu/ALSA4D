@@ -28,17 +28,7 @@
 
 module deimos.alsa.pcm;
 
-import deimos.alsa.conf;
-import deimos.alsa.global;
-import deimos.alsa.output;
-
-import core.sys.posix.poll;
-
-template isVersion(string s)
-{
-    import std.string;
-    mixin(q{version(%s) enum isVersion = true; else enum isVersion = false; }.format(s));
-}
+import deimos.alsa;
 
 
 extern(C):
