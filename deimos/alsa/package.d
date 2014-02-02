@@ -48,6 +48,7 @@ public import deimos.alsa.asoundef,
               deimos.alsa.mixer,
               deimos.alsa.output,
               deimos.alsa.pcm,
+              deimos.alsa.rawmidi,
               deimos.alsa.version_;
 
 
