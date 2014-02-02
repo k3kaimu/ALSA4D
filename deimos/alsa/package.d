@@ -49,6 +49,7 @@ public import deimos.alsa.asoundef,
               deimos.alsa.output,
               deimos.alsa.pcm,
               deimos.alsa.rawmidi,
+              deimos.alsa.timer,
               deimos.alsa.version_;
 
 
