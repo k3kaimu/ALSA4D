@@ -44,11 +44,16 @@ public import deimos.alsa.asoundef,
               deimos.alsa.control,
               deimos.alsa.error,
               deimos.alsa.global,
+              deimos.alsa.hwdep,
               deimos.alsa.input,
               deimos.alsa.mixer,
               deimos.alsa.output,
               deimos.alsa.pcm,
               deimos.alsa.rawmidi,
+              deimos.alsa.seq,
+              deimos.alsa.seq_event,
+              deimos.alsa.seq_midi_event,
+              deimos.alsa.seqmid,
               deimos.alsa.timer,
               deimos.alsa.version_;
 
@@ -56,12 +61,118 @@ public import deimos.alsa.asoundef,
 version(linux)
 {
   public import core.sys.posix.poll,
-                core.sys.posix.sys.types;
+                core.sys.posix.sys.types,
+                core.sys.posix.fcntl;
 }
 else  // for compile test
 {
-  struct pollfd;
-  struct pid_t{};
+    struct pollfd
+    {
+        int     fd;
+        short   events;
+        short   revents;
+    }
+
+    alias int       pid_t;
+
+    version (X86)
+    {
+        enum O_CREAT        = 0x40;     // octal     0100
+        enum O_EXCL         = 0x80;     // octal     0200
+        enum O_NOCTTY       = 0x100;    // octal     0400
+        enum O_TRUNC        = 0x200;    // octal    01000
+
+        enum O_APPEND       = 0x400;    // octal    02000
+        enum O_NONBLOCK     = 0x800;    // octal    04000
+        enum O_SYNC         = 0x101000; // octal 04010000
+        enum O_DSYNC        = 0x1000;   // octal   010000
+        enum O_RSYNC        = O_SYNC;
+    }
+    else version (X86_64)
+    {
+        enum O_CREAT        = 0x40;     // octal     0100
+        enum O_EXCL         = 0x80;     // octal     0200
+        enum O_NOCTTY       = 0x100;    // octal     0400
+        enum O_TRUNC        = 0x200;    // octal    01000
+
+        enum O_APPEND       = 0x400;    // octal    02000
+        enum O_NONBLOCK     = 0x800;    // octal    04000
+        enum O_SYNC         = 0x101000; // octal 04010000
+        enum O_DSYNC        = 0x1000;   // octal   010000
+        enum O_RSYNC        = O_SYNC;
+    }
+    else version (MIPS32)
+    {
+        enum O_CREAT        = 0x0100;
+        enum O_EXCL         = 0x0400;
+        enum O_NOCTTY       = 0x0800;
+        enum O_TRUNC        = 0x0200;
+
+        enum O_APPEND       = 0x0008;
+        enum O_DSYNC        = O_SYNC;
+        enum O_NONBLOCK     = 0x0080;
+        enum O_RSYNC        = O_SYNC;
+        enum O_SYNC         = 0x0010;
+    }
+    else version (PPC)
+    {
+        enum O_CREAT        = 0x40;     // octal     0100
+        enum O_EXCL         = 0x80;     // octal     0200
+        enum O_NOCTTY       = 0x100;    // octal     0400
+        enum O_TRUNC        = 0x200;    // octal    01000
+
+        enum O_APPEND       = 0x400;    // octal    02000
+        enum O_NONBLOCK     = 0x800;    // octal    04000
+        enum O_SYNC         = 0x101000; // octal 04010000
+        enum O_DSYNC        = 0x1000;   // octal   010000
+        enum O_RSYNC        = O_SYNC;
+    }
+    else version (PPC64)
+    {
+        enum O_CREAT        = 0x40;     // octal     0100
+        enum O_EXCL         = 0x80;     // octal     0200
+        enum O_NOCTTY       = 0x100;    // octal     0400
+        enum O_TRUNC        = 0x200;    // octal    01000
+
+        enum O_APPEND       = 0x400;    // octal    02000
+        enum O_NONBLOCK     = 0x800;    // octal    04000
+        enum O_SYNC         = 0x101000; // octal 04010000
+        enum O_DSYNC        = 0x1000;   // octal   010000
+        enum O_RSYNC        = O_SYNC;
+    }
+    else version (ARM)
+    {
+        enum O_CREAT        = 0x40;     // octal     0100
+        enum O_EXCL         = 0x80;     // octal     0200
+        enum O_NOCTTY       = 0x100;    // octal     0400
+        enum O_TRUNC        = 0x200;    // octal    01000
+
+        enum O_APPEND       = 0x400;    // octal    02000
+        enum O_NONBLOCK     = 0x800;    // octal    04000
+        enum O_SYNC         = 0x101000; // octal 04010000
+        enum O_DSYNC        = 0x1000;   // octal   010000
+        enum O_RSYNC        = O_SYNC;
+    }
+    else version (AArch64)
+    {
+        enum O_CREAT        = 0x40;     // octal     0100
+        enum O_EXCL         = 0x80;     // octal     0200
+        enum O_NOCTTY       = 0x100;    // octal     0400
+        enum O_TRUNC        = 0x200;    // octal    01000
+
+        enum O_APPEND       = 0x400;    // octal    02000
+        enum O_NONBLOCK     = 0x800;    // octal    04000
+        enum O_SYNC         = 0x101000; // octal 04010000
+        enum O_DSYNC        = 0x1000;   // octal   010000
+        enum O_RSYNC        = O_SYNC;
+    }
+    else
+        static assert(0, "unimplemented");
+
+    enum O_ACCMODE      = 0x3;
+    enum O_RDONLY       = 0x0;
+    enum O_WRONLY       = 0x1;
+    enum O_RDWR         = 0x2;
 }
 
 template isVersion(string s)
